@@ -1,15 +1,11 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-
-using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
 
 namespace Domain.Entities;
 
 public class ApplicationUser : BaseEntity<int>
 {
     /// <summary>
-    /// It refers to ExtendedIdentityUser
+    /// It refers to  <see cref="ExtendedIdentityUser" />
     /// </summary>
     public int UserId { get; set; }
 
