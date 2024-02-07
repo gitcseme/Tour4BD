@@ -15,4 +15,5 @@ public class Package : BaseEntity<int>
     public ICollection<Spot> Spots { get; set; }
     public ICollection<Rating> Ratings { get; set; }
     public ICollection<Comment> Comments { get; set; }
+    public ICollection<Discount> Discounts { get; set; }
 }
