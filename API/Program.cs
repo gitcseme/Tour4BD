@@ -1,6 +1,12 @@
+using API.MigrationHelpers;
+
+using Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+string tenantDbConnectionString = builder.Configuration.GetConnectionString("TenantDbConnection")!;
+builder.Services.AddPersistence(tenantDbConnectionString);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,5 +27,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.MigrateAsync();
 
 app.Run();
