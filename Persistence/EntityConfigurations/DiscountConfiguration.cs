@@ -9,10 +9,10 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
 {
     public void Configure(EntityTypeBuilder<Discount> builder)
     {
-        builder.HasKey(s =>  s.Id);
+        builder.HasKey(s => s.Id);
 
         builder.HasOne(s => s.Package)
-            .WithMany(p => p.Spots)
+            .WithMany(p => p.Discounts)
             .HasForeignKey(s => s.PackageId)
             .OnDelete(DeleteBehavior.NoAction);
     }
