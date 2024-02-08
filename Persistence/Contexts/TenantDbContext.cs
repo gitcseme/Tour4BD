@@ -3,10 +3,12 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Persistence.Contexts;
 
-public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityRole<int>, int>
+public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityRole<int>, int>, ITenantDbContext
 {
     public TenantDbContext(DbContextOptions<TenantDbContext> options) 
         : base(options)
@@ -14,6 +16,11 @@ public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityR
     }
 
     public DbSet<Tenant> Tenants { get; set; }
+
+    public async Task<int> SaveAsync()
+    {
+        return await base.SaveChangesAsync();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
