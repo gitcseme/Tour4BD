@@ -1,4 +1,4 @@
-name: Build
+name: Tests
 
 on:
   push:
@@ -11,11 +11,11 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout to pull requested branch
+      - name: Checkout to pull-requested branch
         uses: actions/checkout@v3
 
       - name: Setup .NET SDK
@@ -28,3 +28,6 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
+        
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal
