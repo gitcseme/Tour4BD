@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Checkout to pull-requested branch
         uses: actions/checkout@v3
+      - run: branch name = ${{ github.ref }}
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
