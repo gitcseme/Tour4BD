@@ -11,7 +11,7 @@ public class TenantsController : BaseApiController
 {
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TenantResponseDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken) 
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default) 
     {
         var tenantList = await Sender.Send(new GetAllTenantQuery(), cancellationToken);
         return Ok(tenantList);

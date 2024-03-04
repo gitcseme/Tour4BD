@@ -14,18 +14,19 @@ namespace Application.Features.TenantFeatures.Queries;
 
 public record GetAllTenantQuery : IRequest<IEnumerable<TenantResponseDto>>;
 
-public class GetAllTenantHandler : IRequestHandler<GetAllTenantQuery, IEnumerable<TenantResponseDto>>
+public class GetAllTenantQueryHandler : IRequestHandler<GetAllTenantQuery, IEnumerable<TenantResponseDto>>
 {
-    private readonly ITenantDbContext _tenantDbContext;
+    private readonly ITenantUnitOfWork _uow;
 
-    public GetAllTenantHandler(ITenantDbContext tenantDbContext)
+    public GetAllTenantQueryHandler(ITenantUnitOfWork uow)
     {
-        _tenantDbContext = tenantDbContext;
+        _uow = uow;
     }
 
     public async Task<IEnumerable<TenantResponseDto>> Handle(GetAllTenantQuery query, CancellationToken cancellationToken)
     {
-        var tenants = await _tenantDbContext.Tenants
+        var tenants = await _uow.TenantRepository
+            .GetAll()
             .Select(t => new TenantResponseDto
             {
                 Id = t.Id,

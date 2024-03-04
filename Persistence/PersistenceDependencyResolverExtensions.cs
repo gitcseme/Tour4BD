@@ -1,11 +1,12 @@
-﻿using System.Reflection;
-
-using Application.Interfaces;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using Persistence.Contexts;
+using Persistence.Repositories;
+using Persistence.UnitOfWorks;
 
 namespace Persistence;
 
@@ -14,6 +15,9 @@ public static class PersistenceDependencyResolverExtensions
     public static IServiceCollection AddPersistence(this IServiceCollection services, string tenantDbConnectionString)
     {
         services.RegisterDatabaseContexts(tenantDbConnectionString);
+
+        services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<ITenantUnitOfWork, TenantUnitOfWork>();
 
         return services;
     }
