@@ -18,12 +18,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // TODO: dynamic tenant baased connection string
-        optionsBuilder.UseSqlServer(connectionString: "",
-            builder =>
-            {
-                builder.CommandTimeout(30);
-                builder.EnableRetryOnFailure(3);
-            });
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(connectionString: "",
+                builder =>
+                {
+                    builder.CommandTimeout(30);
+                    builder.EnableRetryOnFailure(3);
+                });
+        }
 
         base.OnConfiguring(optionsBuilder);
     }

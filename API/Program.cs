@@ -1,6 +1,7 @@
 using API.Extensions;
 using Persistence;
 using Application;
+using Membership;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 string tenantDbConnectionString = builder.Configuration.GetConnectionString("TenantDbConnection")!;
 builder.Services.AddPersistence(tenantDbConnectionString);
 builder.Services.AddApplication();
+builder.Services.AddMembership();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
