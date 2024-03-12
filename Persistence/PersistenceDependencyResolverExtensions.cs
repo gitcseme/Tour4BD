@@ -1,7 +1,9 @@
-﻿using Application.Interfaces;
+﻿using Application;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Persistence.Contexts;
@@ -12,8 +14,9 @@ namespace Persistence;
 
 public static class PersistenceDependencyResolverExtensions
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection services, string tenantDbConnectionString)
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfigurationManager configurationManager)
     {
+        var tenantDbConnectionString = configurationManager.GetConnectionString(AppConstants.TenantDbConnectionStringName)!;
         services.RegisterDatabaseContexts(tenantDbConnectionString);
 
         services.AddScoped<ITenantRepository, TenantRepository>();
