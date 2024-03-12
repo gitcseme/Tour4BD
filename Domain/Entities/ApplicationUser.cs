@@ -4,6 +4,11 @@ namespace Domain.Entities;
 
 public class ApplicationUser : BaseEntity<int>
 {
+    public ApplicationUser(int userId)
+    {
+        UserId = userId;
+    }
+
     /// <summary>
     /// It refers to  <see cref="ExtendedIdentityUser" />
     /// </summary>
