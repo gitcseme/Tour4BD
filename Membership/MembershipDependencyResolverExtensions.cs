@@ -21,8 +21,10 @@ public static class MembershipDependencyResolverExtensions
 
             action.User.RequireUniqueEmail = true;
         })
+        .AddRoles<IdentityRole<int>>()
         .AddEntityFrameworkStores<TenantDbContext>()
         .AddDefaultTokenProviders();
+
 
         services.AddScoped<IAccountService, AccountService>();
 

@@ -33,3 +33,5 @@ app.MapControllers();
 await app.MigrateAsync();
 
 app.Run();
+
+public partial class Program { }
