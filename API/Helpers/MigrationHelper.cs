@@ -4,8 +4,8 @@ using Domain.Entities;
 using Membership;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace API.Helpers;
@@ -19,7 +19,7 @@ public class MigrationHelper(WebApplication application)
         var tenantDbContext = serviceScope.ServiceProvider.GetRequiredService<ITenantDbContext>();
         await tenantDbContext.Database.MigrateAsync();
         
-        await CreateRolesIfNotExistAsync(serviceScope);
+        await CreateRolesAndAssociatedClaimsIfNotExistAsync(serviceScope);
 
         if (!await tenantDbContext.Tenants.AnyAsync())
         {
@@ -57,7 +57,7 @@ public class MigrationHelper(WebApplication application)
         return defaultTenant;
     }
 
-    private static async Task CreateRolesIfNotExistAsync(IServiceScope serviceScope)
+    private static async Task CreateRolesAndAssociatedClaimsIfNotExistAsync(IServiceScope serviceScope)
     {
         var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
@@ -68,7 +68,12 @@ public class MigrationHelper(WebApplication application)
 
         foreach (var roleName in AppConstants.Roles.GetAll())
         {
-            await roleManager.CreateAsync(new IdentityRole<int>(roleName));
+            IdentityRole<int> newRole = new IdentityRole<int>(roleName);
+            await roleManager.CreateAsync(newRole);
+            foreach (var permission in AppConstants.Permissions.PermissionsDict[roleName])
+            {
+                await roleManager.AddClaimAsync(newRole, new Claim(AppConstants.CustomClaim.Permissions, permission));
+            }
         }
     }
     
