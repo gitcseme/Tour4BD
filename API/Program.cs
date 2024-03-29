@@ -22,6 +22,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
+    await app.MigrateAsync();
 }
 
 app.UseHttpsRedirection();
@@ -30,6 +32,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.MigrateAsync();
 
 app.Run();
+
+public partial class Program { }
