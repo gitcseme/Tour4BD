@@ -1,6 +1,9 @@
-﻿namespace Membership;
+﻿using Domain.Entities;
+
+namespace Membership;
 
 public interface IAccountService
 {
-    Task<int> CreateUser(string email, string password, int tenantId);
+    Task<ExtendedIdentityUser> CreateUser(string email, string password, int tenantId);
+    Task<ExtendedIdentityUser> CreateUserAndAssignAdminRoleAsync(string email, string password, int tenantId);
 }

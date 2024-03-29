@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application;
+using Domain.Entities;
 
 using Microsoft.AspNetCore.Identity;
 
@@ -13,16 +14,23 @@ public class AccountService : IAccountService
         _userManager = userManager;
     }
 
-    public async Task<int> CreateUser(string username, string password, int tenantId)
+    public async Task<ExtendedIdentityUser> CreateUser(string email, string password, int tenantId)
     {
-        var user = new ExtendedIdentityUser(username, tenantId);
+        var user = new ExtendedIdentityUser(email, tenantId);
         var result = await _userManager.CreateAsync(user, password);
 
         if (result.Succeeded)
         {
-            return await Task.FromResult(user.Id);
+            return await Task.FromResult(user);
         }
 
         throw new Exception("Error creating user");
+    }
+
+    public async Task<ExtendedIdentityUser> CreateUserAndAssignAdminRoleAsync(string email, string password, int tenantId)
+    {
+        var user = await CreateUser(email, password, tenantId);
+        await _userManager.AddToRoleAsync(user, AppConstants.Roles.Admin);
+        return user;
     }
 }
