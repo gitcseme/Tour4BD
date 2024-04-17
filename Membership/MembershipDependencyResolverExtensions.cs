@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-
+using Membership.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +27,7 @@ public static class MembershipDependencyResolverExtensions
 
 
         services.AddScoped<IAccountService, AccountService>();
+        services.AddSingleton<IJwtProvider, JwtProvider>();
 
         return services;
     }

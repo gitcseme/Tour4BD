@@ -2,11 +2,12 @@
 
 using Application.Features.TenantFeatures.Queries;
 using Application.Features.TenantFeatures.Responses;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[Authorize]
 public class TenantsController : BaseApiController
 {
     [HttpGet]
