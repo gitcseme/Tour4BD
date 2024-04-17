@@ -6,9 +6,14 @@ using Membership;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddApplication();
-builder.Services.AddMembership();
+builder.Services.AddAppSettingsConfiguration(builder.Configuration);
+
+builder.Services
+    .AddPersistence(builder.Configuration)
+    .AddApplication()
+    .AddMembership()
+    .AddAuthenticationWithJwt(builder.Configuration);
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,12 +27,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
+
     await app.MigrateAsync();
 }
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
