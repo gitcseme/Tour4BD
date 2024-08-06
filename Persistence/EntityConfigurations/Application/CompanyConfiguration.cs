@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.EntityConfigurations;
+namespace Persistence.EntityConfigurations.Application;
 
 public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 {
     public void Configure(EntityTypeBuilder<Company> builder)
     {
-        builder.HasKey(c =>  c.Id);
+        builder.HasKey(c => c.Id);
 
         builder.HasOne(c => c.User)
             .WithMany(u => u.Companies)

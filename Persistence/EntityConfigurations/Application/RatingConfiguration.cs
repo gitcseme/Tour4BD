@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.EntityConfigurations;
+namespace Persistence.EntityConfigurations.Application;
 
 public class RatingConfiguration : IEntityTypeConfiguration<Rating>
 {
     public void Configure(EntityTypeBuilder<Rating> builder)
     {
-        builder.HasKey(r =>  r.Id);
+        builder.HasKey(r => r.Id);
 
         builder.HasOne(r => r.Package)
             .WithMany(p => p.Ratings)

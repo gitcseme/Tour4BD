@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.EntityConfigurations;
+namespace Persistence.EntityConfigurations.Application;
 
 public class CommentConfiguration : IEntityTypeConfiguration<Comment>
 {
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
-        builder.HasKey(c =>  c.Id);
+        builder.HasKey(c => c.Id);
 
         builder.HasOne(s => s.Package)
             .WithMany(p => p.Comments)

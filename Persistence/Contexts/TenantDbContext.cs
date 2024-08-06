@@ -5,6 +5,7 @@ using Application.Interfaces;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Persistence.EntityConfigurations;
 using Domain.Entities;
+using System.Reflection;
 
 namespace Persistence.Contexts;
 
@@ -26,10 +27,12 @@ public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityR
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new TenantConfiguration());
-        modelBuilder.ApplyConfiguration(new EntendedIdentityUserConfiguration());
-        modelBuilder.ApplyConfiguration(new PermissionConfiguration());
-        modelBuilder.ApplyConfiguration(new UserPermissionConfiguration());
+        //modelBuilder.ApplyConfiguration(new TenantConfiguration());
+        //modelBuilder.ApplyConfiguration(new EntendedIdentityUserConfiguration());
+        //modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+        //modelBuilder.ApplyConfiguration(new UserPermissionConfiguration());
+
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreating(modelBuilder);
     }

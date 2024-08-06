@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using System.Reflection;
 
 namespace Persistence.Contexts;
 
@@ -46,13 +47,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new UserConfiguration());
-        builder.ApplyConfiguration(new CompanyConfiguration());
-        builder.ApplyConfiguration(new PackageConfiguration());
-        builder.ApplyConfiguration(new SpotConfiguration());
-        builder.ApplyConfiguration(new RatingConfiguration());
-        builder.ApplyConfiguration(new DiscountConfiguration());
-        builder.ApplyConfiguration(new CommentConfiguration());
+        //builder.ApplyConfiguration(new UserConfiguration());
+        //builder.ApplyConfiguration(new CompanyConfiguration());
+        //builder.ApplyConfiguration(new PackageConfiguration());
+        //builder.ApplyConfiguration(new SpotConfiguration());
+        //builder.ApplyConfiguration(new RatingConfiguration());
+        //builder.ApplyConfiguration(new DiscountConfiguration());
+        //builder.ApplyConfiguration(new CommentConfiguration());
+
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreating(builder);
     }
