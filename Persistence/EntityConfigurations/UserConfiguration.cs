@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,5 +25,13 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .WithOne()
             .HasForeignKey(cm => cm.UserId)
             .OnDelete(DeleteBehavior.NoAction);
+    }
+}
+
+public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
+{
+    public void Configure(EntityTypeBuilder<Permission> builder)
+    {
+        builder.HasKey(x => x.Id);
     }
 }

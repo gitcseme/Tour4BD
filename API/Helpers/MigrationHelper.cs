@@ -19,17 +19,32 @@ public class MigrationHelper(WebApplication application)
         var tenantDbContext = serviceScope.ServiceProvider.GetRequiredService<ITenantDbContext>();
         await tenantDbContext.Database.MigrateAsync();
         
-        await CreateRolesAndAssociatedClaimsIfNotExistAsync(serviceScope);
+        await CreateRolesIfNotExistAsync(serviceScope);
 
         if (!await tenantDbContext.Tenants.AnyAsync())
         {
             var defaultTenant = await CreateDefaultTenantAsync(tenantDbContext);
-            await CreateDefaultUserAsync(serviceScope, defaultTenant);
+            var extendedIdentityUser = await CreateDefaultUserAsync(serviceScope, defaultTenant);
+            await CreateDefaultPermissionsIfNotExistAsync(tenantDbContext, extendedIdentityUser!);
         }
     }
 
+    private static async Task CreateDefaultPermissionsIfNotExistAsync(ITenantDbContext tenantDbContext, ExtendedIdentityUser extendedIdentityUser)
+    {
+        var defaultPermissions = new List<Permission>();
+        foreach (var permissionName in AppConstants.Permissions.GetDefaultPermissions())
+        {
+            var permission = new Permission { Name = permissionName };
+            defaultPermissions.Add(permission);
+        }
 
-    private async Task CreateDefaultUserAsync(IServiceScope serviceScope, Tenant defaultTenant)
+        extendedIdentityUser.Permissions = defaultPermissions;
+
+        tenantDbContext.Users.Update(extendedIdentityUser);
+        await tenantDbContext.SaveAsync();
+    }
+
+    private static async Task<ExtendedIdentityUser?> CreateDefaultUserAsync(IServiceScope serviceScope, Tenant defaultTenant)
     {
         var accountService = serviceScope.ServiceProvider.GetRequiredService<IAccountService>();
         var defaultTenantUser = await accountService.CreateUserAndAssignAdminRoleAsync("vs@gmail.com", "vs$12345", defaultTenant.Id);
@@ -39,6 +54,8 @@ public class MigrationHelper(WebApplication application)
         await appDbContext.Database.MigrateAsync();
         await appDbContext.Users.AddAsync(appUser);
         await appDbContext.SaveAsync();
+
+        return defaultTenantUser;
     }
 
     private static async Task<Tenant> CreateDefaultTenantAsync(ITenantDbContext tenantDbContext)
@@ -57,7 +74,7 @@ public class MigrationHelper(WebApplication application)
         return defaultTenant;
     }
 
-    private static async Task CreateRolesAndAssociatedClaimsIfNotExistAsync(IServiceScope serviceScope)
+    private static async Task CreateRolesIfNotExistAsync(IServiceScope serviceScope)
     {
         var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
@@ -68,12 +85,8 @@ public class MigrationHelper(WebApplication application)
 
         foreach (var roleName in AppConstants.Roles.GetAll())
         {
-            IdentityRole<int> newRole = new IdentityRole<int>(roleName);
+            var newRole = new IdentityRole<int>(roleName);
             await roleManager.CreateAsync(newRole);
-            foreach (var permission in AppConstants.Permissions.PermissionsDict[roleName])
-            {
-                await roleManager.AddClaimAsync(newRole, new Claim(AppConstants.CustomClaim.Permissions, permission));
-            }
         }
     }
     

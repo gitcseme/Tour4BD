@@ -27,7 +27,7 @@ public static class MembershipDependencyResolverExtensions
 
 
         services.AddScoped<IAccountService, AccountService>();
-        services.AddSingleton<IJwtProvider, JwtProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
 
         return services;
     }
