@@ -11,10 +11,8 @@ public abstract class UnitOfWorkBase<TContext>
         _dbContext = dbContext;
     }
 
-    public async Task<int> SaveAsync()
-    {
-        return await _dbContext.SaveChangesAsync();
-    }
+    public async Task<int> SaveAsync() => await _dbContext.SaveChangesAsync();
+    
 
     public int Save() => _dbContext.SaveChanges();
 }
