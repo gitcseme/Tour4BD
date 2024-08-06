@@ -1,10 +1,10 @@
 ﻿using Application.Interfaces;
-using Domain.Entities;
 using Persistence.EntityConfigurations;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Domain.Entities;
 
 namespace Persistence.Contexts;
 

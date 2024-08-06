@@ -1,10 +1,10 @@
-﻿using Domain.Entities;
-
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Persistence.EntityConfigurations;
+using Domain.Entities;
 
 namespace Persistence.Contexts;
 
@@ -16,6 +16,8 @@ public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityR
     }
 
     public DbSet<Tenant> Tenants { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
+    public DbSet<UserPermission> UserPermissions { get; set; }
 
     public async Task<int> SaveAsync()
     {
@@ -24,9 +26,10 @@ public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityR
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Tenant>().HasKey(t => t.Id);
-        modelBuilder.Entity<Tenant>().Property(t => t.ConnectionString).IsRequired();
-        modelBuilder.Entity<Tenant>().Property(t => t.OrganizationName).IsRequired();
+        modelBuilder.ApplyConfiguration(new TenantConfiguration());
+        modelBuilder.ApplyConfiguration(new EntendedIdentityUserConfiguration());
+        modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new UserPermissionConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

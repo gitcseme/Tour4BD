@@ -1,6 +1,5 @@
 ﻿using Application;
 using Domain.Entities;
-
 using Microsoft.AspNetCore.Identity;
 
 namespace Membership;

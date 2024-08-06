@@ -39,10 +39,10 @@ public static class ServiceCollectionExtensions
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtConfig.Issuer,
+                    ValidIssuer = jwtConfig?.Issuer,
                     //ValidAudience = jwtConfig.Audience
                     ClockSkew = TimeSpan.FromSeconds(0),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig?.SecretKey!))
                 };
             });
 

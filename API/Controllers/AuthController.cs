@@ -4,6 +4,7 @@ using Membership.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -25,7 +26,12 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager
+                .Users
+                .AsNoTracking()
+                .Include(u => u.Permissions)
+                .FirstOrDefaultAsync(u => u.Email == request.Email);
+
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
             
             if (signInResult.Succeeded)
@@ -33,11 +39,11 @@ namespace API.Controllers
                 await _signInManager.SignInAsync(user, isPersistent:  false);
             }
 
-            var tokenResult = _jwtProvider.Generate(User);
+            var tokenResult = await _jwtProvider.Generate(User, user);
 
             return Ok(new LoginResponse
             {
-                User = user,
+                User = new UserResponse(user),
                 AccessToken = tokenResult.AccessToken,
                 RefreshToken = tokenResult.RefreshToken
             });

@@ -10,7 +10,20 @@ public class LoginRequest
 
 public class LoginResponse
 {
-    public ExtendedIdentityUser User { get; set; }
+    public UserResponse User { get; set; }
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }
+}
+
+public class UserResponse
+{
+    public UserResponse(ExtendedIdentityUser user)
+    {
+        Id = user.Id;
+        Name = user.UserName;
+        Permissions = user.Permissions.Select(p => p.Name).ToList();
+    }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public List<string> Permissions { get; set; }
 }
