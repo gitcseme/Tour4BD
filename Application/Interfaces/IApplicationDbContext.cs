@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-
 using Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 

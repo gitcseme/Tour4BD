@@ -1,6 +1,4 @@
-﻿using Application.Enums;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Application;
 
@@ -20,21 +18,10 @@ public static class AppConstants
 
     public static class Permissions
     {
-        public static readonly Dictionary<string, IEnumerable<string>> PermissionsDict = new()
+        public static IEnumerable<string> GetDefaultPermissions()
         {
-            { 
-                Roles.Admin, 
-                new List<Permission> { Permission.Read, Permission.Add, Permission.Delete, Permission.Update }.Select(p => p.ToString()) 
-            },
-            {
-                Roles.Manager,
-                new List<Permission> { Permission.Read, Permission.Add, Permission.Update }.Select(p => p.ToString())
-            },
-            {
-                Roles.User,
-                new List<Permission> { Permission.Read, Permission.Add }.Select(p => p.ToString())
-            }
-        };
+            return [ "Add", "Read", "Update", "Delete" ];
+        }
     }
 
     public static class CustomClaim

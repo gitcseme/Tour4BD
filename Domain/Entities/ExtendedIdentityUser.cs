@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace Domain.Entities;
 
 public class ExtendedIdentityUser : IdentityUser<int>
 {
-    public ExtendedIdentityUser() {}
+    public ExtendedIdentityUser() { }
 
     public ExtendedIdentityUser(string email, int tenantId)
     {
@@ -13,4 +14,7 @@ public class ExtendedIdentityUser : IdentityUser<int>
     }
 
     public int TenantId { get; set; }
+
+    public ICollection<Permission> Permissions { get; set; }
+    public ICollection<UserPermission> UserPermissions { get; set; }
 }

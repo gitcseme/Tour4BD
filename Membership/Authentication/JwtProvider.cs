@@ -1,4 +1,7 @@
 ﻿using Application;
+using Application.Interfaces;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,23 +14,17 @@ namespace Membership.Authentication;
 public class JwtProvider : IJwtProvider
 {
     private readonly JwtConfiguration _jwtConfig;
+    private readonly ITenantDbContext _tenantDbContext;
 
-    public JwtProvider(IOptions<JwtConfiguration> config)
+    public JwtProvider(IOptions<JwtConfiguration> config, ITenantDbContext tenantDbContext)
     {
         _jwtConfig = config.Value;
+        _tenantDbContext = tenantDbContext;
     }
 
-    public (string AccessToken, string RefreshToken) Generate(ClaimsPrincipal principal)
+    public async Task<(string AccessToken, string RefreshToken)> Generate(ClaimsPrincipal principal, ExtendedIdentityUser loggedInUser)
     {
-        var claims = new List<Claim> {
-            new Claim(JwtRegisteredClaimNames.Sub, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value),
-            new Claim(JwtRegisteredClaimNames.Email, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value)
-        };
-
-        foreach (var claim in principal.Claims.Where(c => c.Type == AppConstants.CustomClaim.Permissions))
-        {
-            claims.Add(claim);
-        }
+        var claims = await PrepareClaimsAsync(principal, loggedInUser);
 
         var securiryKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.SecretKey));
 
@@ -41,6 +38,22 @@ public class JwtProvider : IJwtProvider
         string jwtToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
         string refreshToken = GenerateRefreshToken();
         return (jwtToken, refreshToken);
+    }
+
+    private async Task<List<Claim>> PrepareClaimsAsync(ClaimsPrincipal principal, ExtendedIdentityUser loggedInUser)
+    {
+        var claims = new List<Claim> {
+            new Claim(JwtRegisteredClaimNames.Sub, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value),
+            new Claim(JwtRegisteredClaimNames.Email, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value)
+        };
+
+        var userPermissions = loggedInUser.Permissions
+            .Select(p => new Claim(AppConstants.CustomClaim.Permissions, p.Name))
+            .ToList();
+
+        claims.AddRange(userPermissions);
+
+        return claims;
     }
 
     private string GenerateRefreshToken()
