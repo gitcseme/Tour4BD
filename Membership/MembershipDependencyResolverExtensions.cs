@@ -25,7 +25,7 @@ public static class MembershipDependencyResolverExtensions
         .AddEntityFrameworkStores<TenantDbContext>()
         .AddDefaultTokenProviders();
 
-
+        services.AddHttpContextAccessor();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IJwtProvider, JwtProvider>();
 

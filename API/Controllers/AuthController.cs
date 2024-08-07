@@ -1,10 +1,6 @@
-﻿using API.Dtos;
-using Domain.Entities;
-using Membership.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Application.DTOs;
+using Membership;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -12,41 +8,23 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly SignInManager<ExtendedIdentityUser> _signInManager;
-        private readonly UserManager<ExtendedIdentityUser> _userManager;
-        private readonly IJwtProvider _jwtProvider;
+        private readonly IAccountService _accountService;
 
-        public AuthController(SignInManager<ExtendedIdentityUser> signInManager, UserManager<ExtendedIdentityUser> userManager, IJwtProvider jwtProvider)
+        public AuthController(IAccountService accountService)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _jwtProvider = jwtProvider;
+            _accountService = accountService;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var user = await _userManager
-                .Users
-                .AsNoTracking()
-                .Include(u => u.Permissions)
-                .FirstOrDefaultAsync(u => u.Email == request.Email);
-
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+            var response = await _accountService.LoginAsync(request);
             
-            if (signInResult.Succeeded)
+            if (response.IsSuccess)
             {
-                await _signInManager.SignInAsync(user, isPersistent:  false);
+                return Ok(response);
             }
-
-            var tokenResult = await _jwtProvider.Generate(User, user);
-
-            return Ok(new LoginResponse
-            {
-                User = new UserResponse(user),
-                AccessToken = tokenResult.AccessToken,
-                RefreshToken = tokenResult.RefreshToken
-            });
+            return BadRequest(response);
         }
     }
 }
