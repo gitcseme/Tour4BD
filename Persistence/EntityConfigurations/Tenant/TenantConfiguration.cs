@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.EntityConfigurations;
+namespace Persistence.EntityConfigurations.Tenant;
 
-public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
+public class TenantConfiguration : IEntityTypeConfiguration<Domain.Entities.Tenant>
 {
-    public void Configure(EntityTypeBuilder<Tenant> builder)
+    public void Configure(EntityTypeBuilder<Domain.Entities.Tenant> builder)
     {
         builder.HasKey(t => t.Id);
         builder.Property(t => t.ConnectionString).IsRequired();

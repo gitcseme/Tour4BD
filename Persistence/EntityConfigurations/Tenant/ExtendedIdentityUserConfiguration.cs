@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
 
-namespace Persistence.EntityConfigurations;
+namespace Persistence.EntityConfigurations.Tenant;
 
-public class EntendedIdentityUserConfiguration : IEntityTypeConfiguration<ExtendedIdentityUser>
+public class ExtendedIdentityUserConfiguration : IEntityTypeConfiguration<ExtendedIdentityUser>
 {
     public void Configure(EntityTypeBuilder<ExtendedIdentityUser> builder)
     {

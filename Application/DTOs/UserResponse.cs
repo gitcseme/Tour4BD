@@ -1,19 +1,9 @@
 ﻿using Domain.Entities;
 
-namespace API.Dtos;
+using System.Collections.Generic;
+using System.Linq;
 
-public class LoginRequest
-{
-    public string Email { get; set; }
-    public string Password { get; set; }
-}
-
-public class LoginResponse
-{
-    public UserResponse User { get; set; }
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-}
+namespace Application.DTOs;
 
 public class UserResponse
 {
