@@ -26,14 +26,14 @@ public class JwtProvider : IJwtProvider
     {
         var claims = await PrepareClaimsAsync(principal, loggedInUser);
 
-        var securiryKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.SecretKey));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.SecretKey));
 
         var securityToken = new JwtSecurityToken(
             issuer: _jwtConfig.Issuer,
             //audience: _jwtConfig.Audience,
             claims: claims,
             expires: DateTime.Now.AddDays(1),
-            signingCredentials: new SigningCredentials(securiryKey, SecurityAlgorithms.HmacSha256));
+            signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256));
 
         string jwtToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
         string refreshToken = GenerateRefreshToken();

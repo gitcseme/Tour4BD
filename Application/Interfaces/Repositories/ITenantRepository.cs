@@ -2,6 +2,6 @@
 
 namespace Application.Interfaces.Repositories;
 
-public interface ITenantRepository : IRepository<Tenant, int>
-{
-}
+//public interface ITenantRepository : IRepository<Tenant, int>
+//{
+//}

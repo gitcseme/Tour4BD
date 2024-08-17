@@ -5,6 +5,8 @@ namespace Application;
 public static class AppConstants
 {
     public const string TenantDbConnectionStringName = "TenantDbConnection";
+    public const string TenantDbContextDIKey = "tenantUOW";
+    public const string ApplicationDbContextDIKey = "applicationUOW";
 
     // Roles
     public static class Roles
