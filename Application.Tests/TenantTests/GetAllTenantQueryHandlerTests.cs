@@ -13,13 +13,13 @@ namespace Application.Tests.TenantTests;
 public class GetAllTenantQueryHandlerTests
 {
     private readonly GetAllTenantQueryHandler _handler;
-    private readonly ITenantUnitOfWork _tenantUnitOfWorkMock;
+    private readonly IUnitOfWork _uow;
 
     public GetAllTenantQueryHandlerTests()
     {
-        _tenantUnitOfWorkMock = Substitute.For<ITenantUnitOfWork>();
+        _uow = Substitute.For<IUnitOfWork>();
 
-        _handler = new GetAllTenantQueryHandler(_tenantUnitOfWorkMock);
+        _handler = new GetAllTenantQueryHandler(_uow);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class GetAllTenantQueryHandlerTests
             new() { Id = 2, OrganizationName = "VS-2", ConnectionString = "con-2" },
         }.AsAsyncQueryable();
 
-        _tenantUnitOfWorkMock.TenantRepository.GetAll().Returns(tenants);
+        _uow.Repository<Tenant, int>().GetAll().Returns(tenants);
 
         // Act
         var result = await _handler.Handle(Arg.Any<GetAllTenantQuery>(), default);
