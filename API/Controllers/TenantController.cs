@@ -12,9 +12,17 @@ public class TenantsController : BaseApiController
 {
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TenantResponseDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default) 
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
         var tenantList = await Sender.Send(new GetAllTenantQuery(), cancellationToken);
         return Ok(tenantList);
     }
+
+    [HttpGet("{tenantId:int}/users")]
+    public async Task<IActionResult> GetAllUsers(int tenantId, CancellationToken cancellationToken = default)
+    {
+        var tenantUsers = await Sender.Send(new GetAllTenantUsersQuery(tenantId), cancellationToken);
+        return Ok(tenantUsers);
+    }
 }
+

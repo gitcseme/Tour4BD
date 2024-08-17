@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces;
 
-public interface ITenantUnitOfWork
-{
-    ITenantRepository TenantRepository { get; }
-}
+//public interface ITenantUnitOfWork : IUnitOfWork
+//{
+
+//}
