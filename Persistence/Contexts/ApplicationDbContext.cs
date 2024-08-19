@@ -12,11 +12,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IJwtProvider _jwtProvider;
 
-    //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    //{
-        
-    //}
-
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IJwtProvider jwtProvider)
         : base(options)
     {
@@ -30,7 +25,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         // TODO: dynamic tenant baased connection string
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer(connectionString: "",//_jwtProvider.GetConnectionStringFromToken(),
+            optionsBuilder.UseSqlServer(connectionString: _jwtProvider.GetConnectionStringFromToken(),
                 builder =>
                 {
                     builder.CommandTimeout(30);

@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 
 namespace Persistence.EntityConfigurations.Tenant;
 
-public class ExtendedIdentityUserConfiguration : IEntityTypeConfiguration<ExtendedIdentityTenantUser>
+public class ExtendedIdentityTenantUserConfiguration : IEntityTypeConfiguration<ExtendedIdentityTenantUser>
 {
     public void Configure(EntityTypeBuilder<ExtendedIdentityTenantUser> builder)
     {
