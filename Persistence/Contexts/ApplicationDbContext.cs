@@ -1,27 +1,36 @@
 ﻿using Application.Interfaces;
-using Persistence.EntityConfigurations;
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Persistence.Contexts;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    private readonly IJwtProvider _jwtProvider;
+
+    //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    //{
+        
+    //}
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IJwtProvider jwtProvider)
         : base(options)
     {
+        _jwtProvider = jwtProvider;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        
+
         // TODO: dynamic tenant baased connection string
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer(connectionString: "",
+            optionsBuilder.UseSqlServer(connectionString: "",//_jwtProvider.GetConnectionStringFromToken(),
                 builder =>
                 {
                     builder.CommandTimeout(30);
@@ -47,17 +56,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        //builder.ApplyConfiguration(new UserConfiguration());
-        //builder.ApplyConfiguration(new CompanyConfiguration());
-        //builder.ApplyConfiguration(new PackageConfiguration());
-        //builder.ApplyConfiguration(new SpotConfiguration());
-        //builder.ApplyConfiguration(new RatingConfiguration());
-        //builder.ApplyConfiguration(new DiscountConfiguration());
-        //builder.ApplyConfiguration(new CommentConfiguration());
-
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreating(builder);
     }
 }
-

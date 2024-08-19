@@ -16,22 +16,22 @@ public class PackageConfiguration : IEntityTypeConfiguration<Package>
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(p => p.Discounts)
-            .WithOne()
+            .WithOne(d => d.Package)
             .HasForeignKey(d => d.PackageId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(p => p.Spots)
-            .WithOne()
+            .WithOne(s => s.Package)
             .HasForeignKey(s => s.PackageId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(p => p.Comments)
-            .WithOne()
+            .WithOne(cmt => cmt.Package)
             .HasForeignKey(cm => cm.PackageId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(p => p.Ratings)
-            .WithOne()
+            .WithOne(r => r.Package)
             .HasForeignKey(r => r.PackageId)
             .OnDelete(DeleteBehavior.NoAction);
     }

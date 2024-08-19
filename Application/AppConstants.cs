@@ -8,12 +8,17 @@ public static class AppConstants
     public const string TenantDbContextDIKey = "tenantUOW";
     public const string ApplicationDbContextDIKey = "applicationUOW";
 
+    public const string TokenItem = "jwt_token";
+
     // Roles
     public static class Roles
     {
         public const string Admin = "Admin";
         public const string User = "User";
         public const string Manager = "Manager";
+        public const string MarketingManager = "MarketingManager";
+        public const string ContentCreator = "ContentCreator";
+
 
         public static string[] GetAll() => [Admin, User, Manager];
     }
@@ -29,5 +34,6 @@ public static class AppConstants
     public static class CustomClaim
     {
         public const string Permissions = "Permissions";
+        public const string TenantConnectionString = "DatabaseConnectionString";
     }
 }

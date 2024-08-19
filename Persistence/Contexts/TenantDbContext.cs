@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Persistence.EntityConfigurations;
 using Domain.Entities;
 using System.Reflection;
+using Domain.Utilities;
 
 namespace Persistence.Contexts;
 
-public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityRole<int>, int>, ITenantDbContext
+public class TenantDbContext : IdentityDbContext<ExtendedIdentityTenantUser, IdentityRole<int>, int>, ITenantDbContext
 {
     public TenantDbContext(DbContextOptions<TenantDbContext> options) 
         : base(options)
@@ -27,13 +26,28 @@ public class TenantDbContext : IdentityDbContext<ExtendedIdentityUser, IdentityR
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.ApplyConfiguration(new TenantConfiguration());
-        //modelBuilder.ApplyConfiguration(new EntendedIdentityUserConfiguration());
-        //modelBuilder.ApplyConfiguration(new PermissionConfiguration());
-        //modelBuilder.ApplyConfiguration(new UserPermissionConfiguration());
+        ConfigureConverterForEncryptedProperty(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    private static void ConfigureConverterForEncryptedProperty(ModelBuilder modelBuilder)
+    {
+        var encryptedStringConverter = new EncryptedStringConverter();
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var propertiesNeedToEncrypt = entityType.ClrType.GetProperties()
+                .Where(p => p.GetCustomAttribute<EncryptedAttribute>() is not null);
+
+            foreach (var property in propertiesNeedToEncrypt)
+            {
+                modelBuilder.Entity(entityType.ClrType)
+                    .Property(property.Name)
+                    .HasConversion(encryptedStringConverter);
+            }
+        }
     }
 }
