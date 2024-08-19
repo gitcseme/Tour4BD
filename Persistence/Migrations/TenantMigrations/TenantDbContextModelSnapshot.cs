@@ -93,6 +93,23 @@ namespace Persistence.Migrations.TenantMigrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("Domain.Entities.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +129,21 @@ namespace Persistence.Migrations.TenantMigrations
                     b.HasKey("Id");
 
                     b.ToTable("Tenants");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserPermission", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("UserPermissions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -247,6 +279,25 @@ namespace Persistence.Migrations.TenantMigrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.UserPermission", b =>
+                {
+                    b.HasOne("Domain.Entities.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ExtendedIdentityUser", "ExtendedIdentityUser")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExtendedIdentityUser");
+
+                    b.Navigation("Permission");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -296,6 +347,16 @@ namespace Persistence.Migrations.TenantMigrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.ExtendedIdentityUser", b =>
+                {
+                    b.Navigation("UserPermissions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Permission", b =>
+                {
+                    b.Navigation("UserPermissions");
                 });
 #pragma warning restore 612, 618
         }

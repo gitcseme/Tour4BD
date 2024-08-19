@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-
+using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -17,7 +17,13 @@ namespace Application.IntegrationTests
     {
         private readonly MsSqlContainer msSqlContainer = new MsSqlBuilder()
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithEnvironment("ACCEPT_EULA", "Y")
             .WithPassword("Strong_password_123!")
+            .WithWaitStrategy(
+                Wait.ForUnixContainer()
+                    //.UntilPortIsAvailable(1433)
+                    .UntilCommandIsCompleted("/opt/mssql-tools18/bin/sqlcmd", "-C", "-Q", "SELECT 1;")
+            )
             .Build();
 
         public async Task InitializeAsync()

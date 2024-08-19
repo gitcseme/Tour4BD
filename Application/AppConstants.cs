@@ -1,12 +1,14 @@
-﻿using Application.Enums;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Application;
 
 public static class AppConstants
 {
     public const string TenantDbConnectionStringName = "TenantDbConnection";
+    public const string TenantDbContextDIKey = "tenantUOW";
+    public const string ApplicationDbContextDIKey = "applicationUOW";
+
+    public const string TokenItem = "jwt_token";
 
     // Roles
     public static class Roles
@@ -14,31 +16,24 @@ public static class AppConstants
         public const string Admin = "Admin";
         public const string User = "User";
         public const string Manager = "Manager";
+        public const string MarketingManager = "MarketingManager";
+        public const string ContentCreator = "ContentCreator";
+
 
         public static string[] GetAll() => [Admin, User, Manager];
     }
 
     public static class Permissions
     {
-        public static readonly Dictionary<string, IEnumerable<string>> PermissionsDict = new()
+        public static IEnumerable<string> GetDefaultPermissions()
         {
-            { 
-                Roles.Admin, 
-                new List<Permission> { Permission.Read, Permission.Add, Permission.Delete, Permission.Update }.Select(p => p.ToString()) 
-            },
-            {
-                Roles.Manager,
-                new List<Permission> { Permission.Read, Permission.Add, Permission.Update }.Select(p => p.ToString())
-            },
-            {
-                Roles.User,
-                new List<Permission> { Permission.Read, Permission.Add }.Select(p => p.ToString())
-            }
-        };
+            return [ "Add", "Read", "Update", "Delete" ];
+        }
     }
 
     public static class CustomClaim
     {
         public const string Permissions = "Permissions";
+        public const string TenantConnectionString = "DatabaseConnectionString";
     }
 }

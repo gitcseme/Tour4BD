@@ -4,17 +4,19 @@ namespace Domain.Entities;
 
 public class ApplicationUser : BaseEntity<int>
 {
-    public ApplicationUser(int userId)
+    public ApplicationUser(){}
+
+    public ApplicationUser(int membershipId)
     {
-        UserId = userId;
+        MembershipId = membershipId;
     }
 
     /// <summary>
-    /// It refers to  <see cref="ExtendedIdentityUser" />
+    /// It refers to  <see cref="ExtendedIdentityTenantUser" />
     /// </summary>
-    public int UserId { get; set; }
+    public int MembershipId { get; set; }
 
-    public ICollection<Company> Companies { get; set; }
-    public ICollection<Rating> Ratings { get; set; }
-    public ICollection<Comment> Comments { get; set; }
+    public ICollection<Company> Companies { get; set; } = [];
+    public ICollection<Rating> Ratings { get; set; } = [];
+    public ICollection<Comment> Comments { get; set; } = [];
 }
