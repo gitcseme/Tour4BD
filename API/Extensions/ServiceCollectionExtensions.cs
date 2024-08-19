@@ -1,4 +1,5 @@
 ﻿using API.Helpers;
+using API.Middlewires;
 
 using Membership.Authentication;
 
@@ -86,6 +87,12 @@ public static class ServiceCollectionExtensions
             });
         });
 
+        return services;
+    }
+
+    public static IServiceCollection AddMiddlewares(this IServiceCollection services)
+    {
+        services.AddScoped<AuthMiddleware>();
         return services;
     }
 }

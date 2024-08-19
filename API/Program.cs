@@ -3,6 +3,7 @@ using Persistence;
 using Application;
 using Membership;
 using Microsoft.OpenApi.Models;
+using API.Middlewires;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,10 @@ builder.Services
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerConfiguration();
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerConfiguration()
+    .AddMiddlewares();
 
 var app = builder.Build();
 
@@ -38,6 +41,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<AuthMiddleware>();
 
 
 app.Run();

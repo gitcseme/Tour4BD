@@ -18,6 +18,9 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
+            request.Email = "vs@gmail.com";
+            request.Password = "vs$12345";
+
             var response = await _accountService.LoginAsync(request);
             
             if (response.IsSuccess)

@@ -7,7 +7,7 @@ namespace Application.DTOs;
 
 public class UserResponse
 {
-    public UserResponse(ExtendedIdentityUser user)
+    public UserResponse(ExtendedIdentityTenantUser user)
     {
         Id = user.Id;
         Name = user.UserName;

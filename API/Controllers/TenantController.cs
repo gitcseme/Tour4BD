@@ -12,17 +12,25 @@ public class TenantsController : BaseApiController
 {
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TenantResponseDto>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetAll(CancellationToken ctn = default)
     {
-        var tenantList = await Sender.Send(new GetAllTenantQuery(), cancellationToken);
+        var tenantList = await Sender.Send(new GetAllTenantQuery(), ctn);
         return Ok(tenantList);
     }
 
     [HttpGet("{tenantId:int}/users")]
-    public async Task<IActionResult> GetAllUsers(int tenantId, CancellationToken cancellationToken = default)
+    [ProducesResponseType(typeof(IEnumerable<TenantUserResponse>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetAllUsers(int tenantId, CancellationToken ctn = default)
     {
-        var tenantUsers = await Sender.Send(new GetAllTenantUsersQuery(tenantId), cancellationToken);
+        var tenantUsers = await Sender.Send(new GetAllTenantUsersQuery(tenantId), ctn);
         return Ok(tenantUsers);
+    }
+
+    [HttpGet("{tenantId:int}/users/{userId}")]
+    public async Task<IActionResult> GetUserDetail(int tenantId, int userId, CancellationToken ctn = default)
+    {
+        var userDetailData = await Sender.Send(new GetUserDetailQuery(tenantId, userId), ctn);
+        return Ok(userDetailData);
     }
 }
 

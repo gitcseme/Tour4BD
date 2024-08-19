@@ -10,7 +10,7 @@ public interface ITenantDbContext
     DbSet<Tenant> Tenants { get; set; }
     DbSet<Permission> Permissions { get; set; }
     DbSet<UserPermission> UserPermissions { get; set; }
-    DbSet<ExtendedIdentityUser> Users { get; set; }
+    DbSet<ExtendedIdentityTenantUser> Users { get; set; }
 
     public Task<int> SaveAsync();
 

@@ -29,7 +29,7 @@ public class MigrationHelper(WebApplication application)
         }
     }
 
-    private static async Task CreateDefaultPermissionsIfNotExistAsync(ITenantDbContext tenantDbContext, ExtendedIdentityUser extendedIdentityUser)
+    private static async Task CreateDefaultPermissionsIfNotExistAsync(ITenantDbContext tenantDbContext, ExtendedIdentityTenantUser extendedIdentityUser)
     {
         var defaultPermissions = new List<Permission>();
         foreach (var permissionName in AppConstants.Permissions.GetDefaultPermissions())
@@ -44,13 +44,13 @@ public class MigrationHelper(WebApplication application)
         await tenantDbContext.SaveAsync();
     }
 
-    private static async Task<ExtendedIdentityUser?> CreateDefaultUserAsync(IServiceScope serviceScope, Tenant defaultTenant)
+    private static async Task<ExtendedIdentityTenantUser?> CreateDefaultUserAsync(IServiceScope serviceScope, Tenant defaultTenant)
     {
         var accountService = serviceScope.ServiceProvider.GetRequiredService<IAccountService>();
         var defaultTenantUser = await accountService.CreateUserAndAssignAdminRoleAsync("vs@gmail.com", "vs$12345", defaultTenant.Id);
 
         var appUser = new ApplicationUser(defaultTenantUser.Id);
-        var appDbContext = GetAppDbContextFromTenantConnectionString(defaultTenant.ConnectionString);
+        var appDbContext = GetAppDbContextFromTenantConnectionString(defaultTenant.ConnectionString, serviceScope);
         await appDbContext.Database.MigrateAsync();
         await appDbContext.Users.AddAsync(appUser);
         await appDbContext.SaveAsync();
@@ -90,11 +90,14 @@ public class MigrationHelper(WebApplication application)
         }
     }
     
-    private static IApplicationDbContext GetAppDbContextFromTenantConnectionString(string connectionString)
+    private static IApplicationDbContext GetAppDbContextFromTenantConnectionString(string connectionString, IServiceScope serviceScope)
     {
-        return new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer(connectionString)
-                .Options
-        );
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                        .UseSqlServer(connectionString)
+                        .Options;
+
+        var jwtProvider = serviceScope.ServiceProvider.GetRequiredService<IJwtProvider>();
+
+        return new ApplicationDbContext(options, jwtProvider);
     }
 }

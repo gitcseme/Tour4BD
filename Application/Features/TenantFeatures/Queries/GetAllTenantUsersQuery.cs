@@ -18,9 +18,9 @@ public record GetAllTenantUsersQuery(int TenantId) : IRequest<IEnumerable<Tenant
 
 public class GetAllTenantUsersQueryHandler : IRequestHandler<GetAllTenantUsersQuery, IEnumerable<TenantUserResponse>>
 {
-    private readonly UserManager<ExtendedIdentityUser> _userManager;
+    private readonly UserManager<ExtendedIdentityTenantUser> _userManager;
 
-    public GetAllTenantUsersQueryHandler(UserManager<ExtendedIdentityUser> userManager)
+    public GetAllTenantUsersQueryHandler(UserManager<ExtendedIdentityTenantUser> userManager)
     {
         _userManager = userManager;
     }

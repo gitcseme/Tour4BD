@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+
+using Domain.Entities;
 using Membership.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +13,7 @@ public static class MembershipDependencyResolverExtensions
 {
     public static IServiceCollection AddMembership(this IServiceCollection services)
     {
-        services.AddIdentity<ExtendedIdentityUser, IdentityRole<int>>(action =>
+        services.AddIdentity<ExtendedIdentityTenantUser, IdentityRole<int>>(action =>
         {
             action.Password.RequireNonAlphanumeric = false;
             action.Password.RequiredLength = 5;
@@ -28,6 +30,7 @@ public static class MembershipDependencyResolverExtensions
         services.AddHttpContextAccessor();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<JwtTokenValidator>();
 
         return services;
     }

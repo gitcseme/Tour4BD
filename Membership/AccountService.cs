@@ -1,10 +1,7 @@
 ﻿using Application;
 using Application.DTOs;
-
+using Application.Interfaces;
 using Domain.Entities;
-
-using Membership.Authentication;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +10,12 @@ namespace Membership;
 
 public class AccountService : IAccountService
 {
-    private readonly UserManager<ExtendedIdentityUser> _userManager;
-    private readonly SignInManager<ExtendedIdentityUser> _signInManager;
+    private readonly UserManager<ExtendedIdentityTenantUser> _userManager;
+    private readonly SignInManager<ExtendedIdentityTenantUser> _signInManager;
     private readonly IJwtProvider _jwtProvider;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AccountService(UserManager<ExtendedIdentityUser> userManager, SignInManager<ExtendedIdentityUser> signInManager, IJwtProvider jwtProvider, IHttpContextAccessor httpContextAccessor)
+    public AccountService(UserManager<ExtendedIdentityTenantUser> userManager, SignInManager<ExtendedIdentityTenantUser> signInManager, IJwtProvider jwtProvider, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -26,9 +23,9 @@ public class AccountService : IAccountService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<ExtendedIdentityUser> CreateUser(string email, string password, int tenantId)
+    public async Task<ExtendedIdentityTenantUser> CreateUser(string email, string password, int tenantId)
     {
-        var user = new ExtendedIdentityUser(email, tenantId);
+        var user = new ExtendedIdentityTenantUser(email, tenantId);
         var result = await _userManager.CreateAsync(user, password);
 
         if (result.Succeeded)
@@ -39,7 +36,7 @@ public class AccountService : IAccountService
         throw new Exception("Error creating user");
     }
 
-    public async Task<ExtendedIdentityUser> CreateUserAndAssignAdminRoleAsync(string email, string password, int tenantId)
+    public async Task<ExtendedIdentityTenantUser> CreateUserAndAssignAdminRoleAsync(string email, string password, int tenantId)
     {
         var user = await CreateUser(email, password, tenantId);
         await _userManager.AddToRoleAsync(user, AppConstants.Roles.Admin);
@@ -72,11 +69,13 @@ public class AccountService : IAccountService
 
         var tokenResult = await _jwtProvider.Generate(_httpContextAccessor.HttpContext.User, user);
 
-        return ApiResponse<LoginResponse>.Success(new LoginResponse
+        var loginResponse = new LoginResponse
         {
             User = new UserResponse(user),
             AccessToken = tokenResult.AccessToken,
             RefreshToken = tokenResult.RefreshToken
-        });
+        };
+
+        return ApiResponse<LoginResponse>.Success(loginResponse);
     }
 }

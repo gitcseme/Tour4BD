@@ -22,5 +22,6 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
     public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> expression) => _table.Where(expression);
 
     public async Task<TEntity?> GetAsync(TKey id) => await _table.FindAsync(id);
-    
+
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> expression) => await _table.FirstOrDefaultAsync(expression);
 }

@@ -11,18 +11,18 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder.ToTable("Users");
 
         builder
-            .HasMany<Company>()
-            .WithOne()
+            .HasMany(u => u.Companies)
+            .WithOne(c => c.User)
             .HasForeignKey(c => c.OwnerId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany<Rating>()
-            .WithOne()
+        builder.HasMany(u => u.Ratings)
+            .WithOne(r => r.User)
             .HasForeignKey(r => r.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany<Comment>()
-            .WithOne()
+        builder.HasMany(u => u.Comments)
+            .WithOne(cmt => cmt.User)
             .HasForeignKey(cm => cm.UserId)
             .OnDelete(DeleteBehavior.NoAction);
     }
