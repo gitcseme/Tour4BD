@@ -17,7 +17,7 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
         _table = _context.Set<TEntity>();
     }
 
-    public IQueryable<TEntity> Query(bool asNoTracking=true) =>  _table.AsNoTracking();
+    public IQueryable<TEntity> Query(bool asNoTracking=true) => asNoTracking ? _table.AsNoTracking() : _table;
     
     public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> expression) => _table.Where(expression);
 
