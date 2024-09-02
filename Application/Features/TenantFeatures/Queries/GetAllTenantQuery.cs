@@ -27,7 +27,7 @@ public class GetAllTenantQueryHandler : IRequestHandler<GetAllTenantQuery, IEnum
     public async Task<IEnumerable<TenantResponseDto>> Handle(GetAllTenantQuery query, CancellationToken ctn)
     {
         var tenants = await _uow.Repository<Tenant, int>()
-            .GetAll()
+            .Query()
             .Select(t => new TenantResponseDto
             {
                 Id = t.Id,

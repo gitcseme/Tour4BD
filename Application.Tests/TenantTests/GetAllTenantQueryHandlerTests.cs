@@ -32,7 +32,7 @@ public class GetAllTenantQueryHandlerTests
             new() { Id = 2, OrganizationName = "VS-2", ConnectionString = "con-2" },
         }.AsAsyncQueryable();
 
-        _uow.Repository<Tenant, int>().GetAll().Returns(tenants);
+        _uow.Repository<Tenant, int>().Query().Returns(tenants);
 
         // Act
         var result = await _handler.Handle(Arg.Any<GetAllTenantQuery>(), default);

@@ -31,7 +31,7 @@ public class GetUserDetailQueryHandler : IRequestHandler<GetUserDetailQuery, Use
     public async Task<UserDetailResponse> Handle(GetUserDetailQuery request, CancellationToken ctn)
     {
         var appUser = await _uow.Repository<ApplicationUser, int>()
-            .GetAll()
+            .Query()
             .Include(u => u.Companies)
             .Include(u => u.Ratings)
             .Include(u => u.Comments)
