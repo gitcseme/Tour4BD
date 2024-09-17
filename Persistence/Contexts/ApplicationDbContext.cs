@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Persistence.Contexts;
 
@@ -20,9 +17,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        
-
-        // TODO: dynamic tenant baased connection string
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(connectionString: _jwtProvider.GetConnectionStringFromToken(),

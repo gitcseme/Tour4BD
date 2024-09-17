@@ -3,6 +3,7 @@ using Domain.Utilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Membership.Authentication;
@@ -16,7 +17,7 @@ public class JwtTokenValidator
         _jwtConfig = config.Value;
     }
 
-    public string ValidateToken(string token)
+    public ClaimsPrincipal? ValidateToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenValidationParameter = new TokenValidationParameters
@@ -34,10 +35,7 @@ public class JwtTokenValidator
         try
         {
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameter, out var validatedToken);
-            var claims = principal.Claims;
-
-            var tenantConnectionStringEncrypted = claims.FirstOrDefault(c => c.Type == AppConstants.CustomClaim.TenantConnectionString)?.Value;
-            return EncryptionHelper.Decrypt(tenantConnectionStringEncrypted!);
+            return principal;
         }
         catch (Exception ex)
         {
