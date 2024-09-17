@@ -59,9 +59,9 @@ public class JwtProvider : IJwtProvider
         }
 
         var claims = new List<Claim> {
-            new Claim(JwtRegisteredClaimNames.Sub, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value),
-            new Claim(JwtRegisteredClaimNames.Email, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value),
-            new Claim(AppConstants.CustomClaim.TenantConnectionString, EncryptionHelper.Encrypt(tenant.ConnectionString))
+            new (JwtRegisteredClaimNames.Sub, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value),
+            new (JwtRegisteredClaimNames.Email, principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value),
+            new (AppConstants.CustomClaim.TenantConnectionString, EncryptionHelper.Encrypt(tenant.ConnectionString))
         };
 
         var userPermissions = loggedInUser.Permissions
@@ -86,8 +86,9 @@ public class JwtProvider : IJwtProvider
     {
         var authData = _httpContextAccessor.HttpContext.Items[AppConstants.TokenItem] ?? throw new Exception("User is not authenticated");
         var accessToken = authData as string;
-        var tenantConnectionString = _tokenValidator.ValidateToken(accessToken!);
-        
-        return tenantConnectionString;
+        var principal = _tokenValidator.ValidateToken(accessToken!) ?? throw new Exception("Token principal is null");
+
+        var tenantConnectionStringEncrypted = principal.Claims.FirstOrDefault(c => c.Type == AppConstants.CustomClaim.TenantConnectionString)?.Value;
+        return EncryptionHelper.Decrypt(tenantConnectionStringEncrypted!);
     }
 }

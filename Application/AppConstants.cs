@@ -36,4 +36,11 @@ public static class AppConstants
         public const string Permissions = "Permissions";
         public const string TenantConnectionString = "DatabaseConnectionString";
     }
+
+    public static class DefaultMessages
+    {
+        public const string CreateSuccess = "Data created successfully";
+        public const string CreateFailed = "Data created successfully";
+
+    }
 }

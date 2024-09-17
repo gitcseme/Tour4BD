@@ -24,4 +24,9 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
     public async Task<TEntity?> GetAsync(TKey id) => await _table.FindAsync(id);
 
     public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> expression) => await _table.FirstOrDefaultAsync(expression);
+
+    public async Task AddAsync(TEntity entity, CancellationToken ct = default)
+    {
+        await _table.AddAsync(entity, ct);
+    }
 }
