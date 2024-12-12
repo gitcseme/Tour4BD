@@ -6,6 +6,5 @@ namespace Application.Interfaces;
 
 public interface IJwtProvider
 {
-    Task<(string AccessToken, string RefreshToken)> Generate(ClaimsPrincipal principal, ExtendedIdentityTenantUser loggedInUser);
-    string GetConnectionStringFromToken();
+    Task<(string AccessToken, string RefreshToken)> Generate(ClaimsPrincipal principal, SystemUser loggedInUser);
 }

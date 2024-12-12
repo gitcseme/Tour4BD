@@ -1,13 +1,7 @@
-﻿using Application.Interfaces;
-using DotNet.Testcontainers.Builders;
+﻿using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
-using Persistence.Contexts;
 
 using Testcontainers.MsSql;
 
@@ -35,28 +29,28 @@ namespace Application.IntegrationTests
         {
             builder.ConfigureTestServices(services =>
             {
-                var tenantServiceDescriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<TenantDbContext>));
+                //var tenantServiceDescriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<TenantDbContext>));
 
-                if (tenantServiceDescriptor is not null)
-                {
-                    services.Remove(tenantServiceDescriptor);
-                }
+                //if (tenantServiceDescriptor is not null)
+                //{
+                //    services.Remove(tenantServiceDescriptor);
+                //}
 
-                var tenantInterfaceServiceDescriptor = ServiceDescriptor.Scoped<ITenantDbContext, TenantDbContext>();
+                //var tenantInterfaceServiceDescriptor = ServiceDescriptor.Scoped<ITenantDbContext, TenantDbContext>();
 
-                if (tenantInterfaceServiceDescriptor is not null)
-                {
-                    services.Remove(tenantInterfaceServiceDescriptor);
-                }
+                //if (tenantInterfaceServiceDescriptor is not null)
+                //{
+                //    services.Remove(tenantInterfaceServiceDescriptor);
+                //}
 
 
-                var dockerInstanceConnectionString = msSqlContainer.GetConnectionString();
-                services.AddDbContext<TenantDbContext>(options =>
-                {
-                    options.UseSqlServer(dockerInstanceConnectionString);
-                });
+                //var dockerInstanceConnectionString = msSqlContainer.GetConnectionString();
+                //services.AddDbContext<TenantDbContext>(options =>
+                //{
+                //    options.UseSqlServer(dockerInstanceConnectionString);
+                //});
 
-                services.AddScoped<ITenantDbContext, TenantDbContext>();
+                //services.AddScoped<ITenantDbContext, TenantDbContext>();
 
             });
         }

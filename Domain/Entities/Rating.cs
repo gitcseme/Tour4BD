@@ -1,13 +1,13 @@
 ﻿namespace Domain.Entities;
 
-public class Rating : BaseEntity<int>
+public class Rating : EntityBase<int>
 {
+    public int Star { get; set; }
     public int? CompanyId { get; set; }
-    public Company Company { get; set; }
-
     public int? PackageId { get; set; }
-    public Package Package { get; set; }
+    public int VisitorId { get; set; }
 
-    public int UserId { get; set; }
-    public ApplicationUser User { get; set; }
+    public Company Company { get; set; }
+    public Package Package { get; set; }
+    public Visitor Visitor { get; set; }
 }

@@ -1,10 +1,10 @@
 ﻿namespace Domain.Entities;
 
-public class UserPermission
+public class UserPermission : EntityBase<int>
 {
     public int UserId { get; set; }
     public int PermissionId { get; set; }
 
-    public ExtendedIdentityTenantUser ExtendedIdentityUser { get; set; }
+    public SystemUser SystemUser { get; set; }
     public Permission Permission { get; set; }
 }
