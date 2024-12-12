@@ -11,10 +11,8 @@ namespace API.Controllers
         public CompaniesController() { }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCompanyCommand command, CancellationToken ctn = default)
-        {
-            var response = await Sender.Send(command, ctn);
-            return Created(string.Empty, response);
-        }
+        public async Task<IActionResult> Create(CreateCompanyCommand command, CancellationToken ctn = default) =>
+            ApiResponse(await Sender.Send(command, ctn));
+        
     }
 }
