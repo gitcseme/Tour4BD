@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Package : BaseEntity<int>
+public class Package : EntityBase<int>
 {
     public string Name { get; set; } = string.Empty;
 

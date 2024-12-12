@@ -1,5 +1,4 @@
-﻿using Application.Interfaces.Repositories;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces;
 
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
-    IRepository<TEntity, TKey> Repository<TEntity, TKey>()  where TEntity : BaseEntity<TKey>;
+    IQueryable<TEntity> GetTable<TEntity>() where TEntity : class;
+    IRepository<TEntity, TKey> Repository<TEntity, TKey>()  where TEntity : EntityBase<TKey>;
     int Save();
     Task<int> SaveAsync();
 }

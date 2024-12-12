@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Domain.Entities;
 
-public class Company : BaseEntity<int>
+public class Company : EntityBase<int>, IAgencyFilter
 {
-    public string Name { get; set; } = string.Empty;
-    public string Address { get; set; } = string.Empty;
-    public string LisenceLink { get; set; } = string.Empty;
+    public string Name { get; set; }
+    public string Address { get; set; }
+    public string LisenceLink { get; set; }
+    public bool IsActive { get; set; }
+    public int TravelAgencyId { get; set; }
 
-    public int OwnerId { get; set; }
-    public ApplicationUser User { get; set; }
+    public TravelAgency TravelAgency { get; set; }
     public ICollection<Package> Packages { get; set; } = [];
     public ICollection<Rating> Ratings { get; set; } = [];
+    public ICollection<Employee> Employees { get; set; } = [];
 }

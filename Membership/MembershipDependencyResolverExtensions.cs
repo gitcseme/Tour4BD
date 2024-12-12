@@ -13,7 +13,7 @@ public static class MembershipDependencyResolverExtensions
 {
     public static IServiceCollection AddMembership(this IServiceCollection services)
     {
-        services.AddIdentity<ExtendedIdentityTenantUser, IdentityRole<int>>(action =>
+        services.AddIdentity<SystemUser, IdentityRole<int>>(action =>
         {
             action.Password.RequireNonAlphanumeric = false;
             action.Password.RequiredLength = 5;
@@ -24,14 +24,12 @@ public static class MembershipDependencyResolverExtensions
             action.User.RequireUniqueEmail = true;
         })
         .AddRoles<IdentityRole<int>>()
-        .AddEntityFrameworkStores<TenantDbContext>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
         services.AddHttpContextAccessor();
-        services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IJwtProvider, JwtProvider>();
-        services.AddScoped<JwtTokenValidator>();
-
+        
         return services;
     }
 }

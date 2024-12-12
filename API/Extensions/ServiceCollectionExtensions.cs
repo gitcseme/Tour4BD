@@ -1,12 +1,10 @@
-﻿using API.Helpers;
-using API.Middlewires;
-
+﻿using Application.Interfaces;
 using Membership.Authentication;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
+using Persistence.Contexts;
 using System.Text;
 
 namespace API.Extensions;
@@ -15,9 +13,13 @@ public static class ServiceCollectionExtensions
 {
     public static async Task MigrateAsync(this WebApplication app)
     {
-        var migrationHelper = new MigrationHelper(app);
-        await migrationHelper.SeedAsync();
-
+        using var scope = app.Services.CreateScope();
+        using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        
+        if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+        {
+            await dbContext.Database.MigrateAsync();
+        }
     }
 
     public static IServiceCollection AddAppSettingsConfiguration(this IServiceCollection services, IConfiguration configuration)
@@ -58,7 +60,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSwaggerGen(cfg =>
         {
-            cfg.SwaggerDoc("v1", new OpenApiInfo { Title = "tourBD API", Version = "v1" });
+            cfg.SwaggerDoc("v1", new OpenApiInfo { Title = "tour4BD API", Version = "v1" });
 
             // Configure JWT Authentication in Swagger
             cfg.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -87,12 +89,6 @@ public static class ServiceCollectionExtensions
             });
         });
 
-        return services;
-    }
-
-    public static IServiceCollection AddMiddlewares(this IServiceCollection services)
-    {
-        services.AddScoped<AuthMiddleware>();
         return services;
     }
 }
