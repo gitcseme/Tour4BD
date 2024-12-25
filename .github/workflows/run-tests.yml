@@ -23,10 +23,10 @@ jobs:
           dotnet-version: 9.0.x
       
       - name: Restore dependencies
-        run: dotnet restore TourBD.sln
+        run: dotnet restore Tour4BD.sln
 
       - name: Build
-        run: dotnet build TourBD.sln --no-restore
+        run: dotnet build Tour4BD.sln --no-restore
         
       - name: Run tests
         run: dotnet test --no-build --verbosity normal
