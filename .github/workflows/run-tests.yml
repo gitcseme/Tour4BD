@@ -29,4 +29,4 @@ jobs:
         run: dotnet build Tour4BD.sln --no-restore
         
       - name: Run tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test Tour4BD.sln --no-build --verbosity normal
