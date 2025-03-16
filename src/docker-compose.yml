@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  tour4bd-api:
+    build: 
+      context: .
+      dockerfile: Presentation/API/Dockerfile
+    container_name: tour4bd-api-con
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"
+    depends_on:
+      - tour4bd-db
+    networks:
+      - appnetwork
+
+  tour4bd-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: tour4bd-db-con
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "NP_HARD_Strong!Passw0rd"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - appnetwork
+
+volumes:
+  mssql_data:
+
+networks:
+  appnetwork:
+    driver: bridge
