@@ -2,6 +2,8 @@ using API.Extensions;
 using Persistence;
 using Application;
 using Membership;
+using SharedKarnel;
+using API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ if (app.Environment.IsDevelopment())
 
     await app.MigrateAsync();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

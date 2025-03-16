@@ -1,10 +1,10 @@
 ﻿using Application;
-using Application.Interfaces;
-
+using Application.Abstructions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
+using SharedKarnel;
 
 namespace Persistence;
 

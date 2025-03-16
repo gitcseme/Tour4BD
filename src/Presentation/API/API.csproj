@@ -13,13 +13,9 @@
 
   <ItemGroup>
     <Compile Remove="Helpers\**" />
-    <Compile Remove="Middlewares\**" />
     <Content Remove="Helpers\**" />
-    <Content Remove="Middlewares\**" />
     <EmbeddedResource Remove="Helpers\**" />
-    <EmbeddedResource Remove="Middlewares\**" />
     <None Remove="Helpers\**" />
-    <None Remove="Middlewares\**" />
   </ItemGroup>
 
   <ItemGroup>
