@@ -9,9 +9,10 @@ public class TravelAgenciesController : BaseApiController
     [HttpPost]
     public async Task<IActionResult> AddOrUpdate(AddOrUpdateTravelAgencyCommand command) => ApiResponse(await Sender.Send(command));
 
-    [HttpGet]
+    [HttpPost("list")]
     public async Task<IActionResult> GetList(GetAllTravelAgencyQuery query) => ApiResponse(await Sender.Send(query));
 
-    [HttpGet]
-    public async Task<IActionResult> GetById(GetTravelAgencyByIdQuery query) => ApiResponse(await Sender.Send(query));
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id) => 
+        ApiResponse(await Sender.Send(new GetTravelAgencyByIdQuery { Id = id }));
 }

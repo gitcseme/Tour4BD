@@ -2,32 +2,22 @@ using API.Extensions;
 using Persistence;
 using Application;
 using Membership;
-using SharedKarnel;
 using API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAppSettingsConfiguration(builder.Configuration);
-
-builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
+builder.AddBasicMvcConfiguration();
 
 builder.Services
     .AddPersistence(builder.Configuration)
     .AddApplication()
     .AddMembership()
-    .AddAuthenticationWithJwt(builder.Configuration);
-
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services
-    .AddEndpointsApiExplorer()
+    .AddAuthenticationWithJwt(builder.Configuration)
     .AddSwaggerConfiguration();
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 

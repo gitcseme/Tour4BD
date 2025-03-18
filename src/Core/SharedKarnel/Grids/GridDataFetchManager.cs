@@ -31,14 +31,14 @@ public class GridDataFetchManager(IMapper mapper)
         var propertyInfos = responseType.GetProperties();
         var fields = request.GetPascalcaseFields();
 
-        if (!fields.Any())
+        if (fields.Count == 0)
         {
             return propertyInfos.Select(x => x.Name).ToArray();
         }
 
         var invalidFields = fields.Except(propertyInfos.Select(x => x.Name)).ToList();
 
-        if (invalidFields.Any())
+        if (invalidFields.Count != 0)
         {
             throw new InvalidRequestException($"[{string.Join(", ", invalidFields)}] are invalid fields");
         }

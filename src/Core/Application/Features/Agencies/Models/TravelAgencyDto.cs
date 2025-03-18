@@ -33,5 +33,10 @@ public class TravelAgencyMappingProfile : Profile
     public TravelAgencyMappingProfile()
     {
         CreateMap<AddOrUpdateTravelAgencyCommand, TravelAgency>();
+
+        CreateMap<TravelAgency, TravelAgencyBaseModel>();
+        CreateMap<TravelAgency, TravelAgencyDetailModel>();
+        CreateMap<TravelAgency, TravelAgencyListModel>()
+            .ForAllMembers(opt => opt.ExplicitExpansion());
     }
 }
