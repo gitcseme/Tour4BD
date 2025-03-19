@@ -1,24 +1,25 @@
-﻿using Application.Features.Auth.Models;
+﻿using Application.Abstructions;
+using Application.Features.Auth.Models;
 using Application.Interfaces;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharedKarnel.Contracts;
-using SharedKarnel.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands;
 
-public record LoginCommand(string Email, string Password, bool RememberMe) : ICommand<LoginResponse>;
+public record LoginCommand(string Email, string Password, bool RememberMe) : IRequest<Result<LoginResponse>>;
 
 public class LoginCommandHandler(
     SignInManager<SystemUser> signInManager,
     IJwtProvider jwtProvider,
     IHttpContextAccessor _httpContextAccessor,
     IUnitOfWork uow)
-    : ICommandHandler<LoginCommand, LoginResponse>
+    : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     public async Task<Result<LoginResponse>> Handle(LoginCommand cmd, CancellationToken ctn)
     {

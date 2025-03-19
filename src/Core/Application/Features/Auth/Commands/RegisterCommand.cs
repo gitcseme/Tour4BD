@@ -1,20 +1,16 @@
 ﻿using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedKarnel.Contracts;
-using SharedKarnel.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.Auth.Commands;
 
-public record RegisterCommand(string Email, string Password) : ICommand<bool>;
+public record RegisterCommand(string Email, string Password) : IRequest<Result<bool>>;
 
 public class RegisterCommandHandler(UserManager<SystemUser> userManager)
-    : ICommandHandler<RegisterCommand, bool>
+    : IRequestHandler<RegisterCommand, Result<bool>>
 {
     public async Task<Result<bool>> Handle(RegisterCommand request, CancellationToken ctn)
     {
@@ -22,7 +18,7 @@ public class RegisterCommandHandler(UserManager<SystemUser> userManager)
         var result = await userManager.CreateAsync(systemUser, request.Password);
 
         return result.Succeeded 
-            ? Result<bool>.Success(result.Succeeded) 
+            ? Result<bool>.Success(true) 
             : Result<bool>.Failure(result.Errors, "registration failed");
     }
 }
