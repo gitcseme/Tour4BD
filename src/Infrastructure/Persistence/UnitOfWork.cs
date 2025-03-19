@@ -1,70 +1,60 @@
-﻿using Application.Interfaces;
+﻿using Application.Abstructions;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Persistence;
 
 public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
 {
-    protected readonly TContext _dbContext;
-    private Dictionary<Type, object> _typeRepositoryMap;
-    private bool disposedValue;
+    protected readonly TContext _context;
+    private readonly Dictionary<Type, object> _typeRepositoryDict;
 
-    public UnitOfWork(TContext dbContext)
+    public UnitOfWork(TContext context)
     {
-        _dbContext = dbContext;
-        _typeRepositoryMap = [];
+        _context = context;
+        _typeRepositoryDict = [];
     }
 
-    public async Task<int> SaveAsync() => await _dbContext.SaveChangesAsync();
+    public int Save()
+    {
+        return _context.SaveChanges();
+    }
 
+    public async Task<int> SaveAsync(CancellationToken ctn)
+    {
+        return await _context.SaveChangesAsync(ctn);
+    }
 
-    public int Save() => _dbContext.SaveChanges();
-
-    public IRepository<TEntity, TKey> Repository<TEntity, TKey>()
+    public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>()
+        where TKey : IEquatable<TKey>
         where TEntity : EntityBase<TKey>
     {
         var type = typeof(TEntity);
-        if (!_typeRepositoryMap.ContainsKey(type))
+        if (_typeRepositoryDict.TryGetValue(type, out var resolvedRepository))
         {
-            _typeRepositoryMap[type] = new Repository<TEntity, TKey>(_dbContext);
+            return (IRepository<TEntity, TKey>) resolvedRepository;
         }
 
-        return (IRepository<TEntity, TKey>)_typeRepositoryMap[type];
+        var repository = new Repository<TEntity, TKey>(_context);
+        _typeRepositoryDict.Add(type, repository);
+
+        return repository;
     }
 
-    public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class
+    public DbContext GetUnderlyingDbContext() => _context;
+    
+
+    public IQueryable<TEntity> GetTable<TEntity>()
+        where TEntity : class
     {
-        return _dbContext.Set<TEntity>();
+        return _context.Set<TEntity>();
     }
 
-    protected virtual void Dispose(bool disposing)
+    public DbSet<TEntity> GetDbSet<TEntity>()
+        where TEntity : class
     {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                // TODO: dispose managed state (managed objects)
-                _typeRepositoryMap?.Clear();
-            }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
-            disposedValue = true;
-        }
+        return _context.Set<TEntity>();
     }
 
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~UnitOfWork()
-    // {
-    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-    //     Dispose(disposing: false);
-    // }
-
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
 }

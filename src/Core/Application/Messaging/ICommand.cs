@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SharedKarnel.Contracts;
 
-namespace SharedKarnel.Messaging;
+namespace Application.Messaging;
 
 public interface ICommand<T> : IRequest<Result<T>>;

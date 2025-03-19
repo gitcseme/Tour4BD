@@ -20,4 +20,8 @@ public class Result<T>
         Message = message,
         IsSuccess = false
     };
+
+    public static implicit operator Result<T>(T data) => Success(data);
+    public static implicit operator T(Result<T> result) => result.Data;
+
 }

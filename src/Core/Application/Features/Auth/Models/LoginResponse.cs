@@ -7,9 +7,18 @@ namespace Application.Features.Auth.Models;
 
 public record LoginResponse(UserResponse User, string AccessToken, string RefreshToken);
 
-public class UserResponse(SystemUser user)
+public class UserResponse
 {
-    public int Id { get; set; } = user.Id;
-    public string? Name { get; set; } = user.UserName;
-    public List<string> Permissions { get; set; } = user.UserPermissions.Select(up => up.Permission.Name).ToList();
+    public UserResponse() {}
+
+    public UserResponse(SystemUser user)
+    {
+        Id = user.Id;
+        Name = user.UserName;
+        Permissions = user.UserPermissions.Select(up => up.Permission.Name).ToList();
+    }
+
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public List<string> Permissions { get; set; }
 }

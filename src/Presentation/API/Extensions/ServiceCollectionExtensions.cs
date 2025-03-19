@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using Membership.Authentication;
+﻿using Membership.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,11 +21,23 @@ public static class ServiceCollectionExtensions
         }
     }
 
-    public static IServiceCollection AddAppSettingsConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static WebApplicationBuilder AddBasicMvcConfiguration(this WebApplicationBuilder builder)
     {
-        services.Configure<JwtConfiguration>(configuration.GetSection(nameof(JwtConfiguration)));
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            });
 
-        return services;
+        builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(nameof(JwtConfiguration)));
+
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
+        return builder;
     }
 
     public static IServiceCollection AddAuthenticationWithJwt(this IServiceCollection services, IConfiguration configuration)

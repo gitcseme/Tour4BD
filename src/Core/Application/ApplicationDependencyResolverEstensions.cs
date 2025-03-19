@@ -1,10 +1,5 @@
 ﻿using System.Reflection;
 
-using Application.Interfaces;
-using Application.Mapping;
-
-using AutoMapper;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
