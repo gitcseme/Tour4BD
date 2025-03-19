@@ -48,7 +48,7 @@ public class ExceptionHandlingMiddleware
             var problemDetails = new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,
-                Title = "Server Error",
+                Title = "Internal Server Error",
                 Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
                 // comment out this property while in production
                 Detail = exception.InnerException?.Message ?? exception.Message
@@ -57,7 +57,7 @@ public class ExceptionHandlingMiddleware
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             await context.Response.WriteAsJsonAsync(
-                Result<ProblemDetails>.Failure(problemDetails, "Server Error"));
+                Result<ProblemDetails>.Failure(problemDetails, "Internal Server Error"));
         }
     }
 }
