@@ -14,6 +14,8 @@ services:
       - tour4bd-db
     networks:
       - appnetwork
+    mem_limit: 128m
+    cpus: 0.1
 
   tour4bd-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
