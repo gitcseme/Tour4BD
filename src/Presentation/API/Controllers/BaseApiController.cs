@@ -16,6 +16,8 @@ public class BaseApiController : ControllerBase
     [NonAction]
     public IActionResult ApiResponse<T>(Result<T> result)
     {
+        result.HostUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+
         return result.IsSuccess
             ? Ok(result)
             : BadRequest(result);

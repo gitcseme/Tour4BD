@@ -1,9 +1,26 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Domain.Utilities;
+﻿
+using Bogus;
+using Domain.Entities;
+using Persistence;
+using Persistence.Contexts;
 
-string test = "Hello, World!";
+var builder = WebApplication.CreateBuilder(args);
 
-var encrypted = EncryptionHelper.Encrypt(test);
-var decrypted = EncryptionHelper.Decrypt(encrypted);
+builder.Services.AddPersistence(builder.Configuration);
 
-Console.WriteLine(encrypted + "\n" + decrypted);
+var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+var taf = new Faker<TravelAgency>()
+    .RuleFor(x => x.Name, f => f.Company.CompanyName())
+    .RuleFor(x => x.City, f => f.Address.City())
+    .RuleFor(x => x.Country, f => f.Address.Country())
+    .RuleFor(x => x.Address, f => f.Address.FullAddress());
+
+var travelAgencies = taf.Generate(50000);
+
+await dbContext.TravelAgencies.AddRangeAsync(travelAgencies);
+await dbContext.SaveChangesAsync();
+

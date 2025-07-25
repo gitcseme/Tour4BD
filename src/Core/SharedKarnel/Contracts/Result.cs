@@ -6,6 +6,7 @@ public class Result<T>
     public T Data { get; set; }
     public bool IsSuccess { get; set; }
     public dynamic Errors { get; set; }
+    public string? HostUrl { get; set; }
 
     public static Result<T> Success(T data, string message = default) => new()
     {
