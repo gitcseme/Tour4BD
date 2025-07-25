@@ -19,7 +19,7 @@ var taf = new Faker<TravelAgency>()
     .RuleFor(x => x.Country, f => f.Address.Country())
     .RuleFor(x => x.Address, f => f.Address.FullAddress());
 
-var travelAgencies = taf.Generate(100);
+var travelAgencies = taf.Generate(50000);
 
 await dbContext.TravelAgencies.AddRangeAsync(travelAgencies);
 await dbContext.SaveChangesAsync();

@@ -14,15 +14,13 @@ services:
       - tour4bd-db
     networks:
       - appnetwork
-    mem_limit: 128m
-    cpus: 0.1
 
   tour4bd-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: tour4bd-db-con
     restart: always
     ports:
-      - "1433:1433"
+      - "15672:1433"
     environment:
       SA_PASSWORD: "NP_HARD_Strong!Passw0rd"
       ACCEPT_EULA: "Y"
