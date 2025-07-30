@@ -11,7 +11,7 @@ builder.AddBasicMvcConfiguration();
 
 builder.Services
     .AddPersistence(builder.Configuration)
-    .AddApplication()
+    .AddApplication(builder.Configuration)
     .AddMembership()
     .AddAuthenticationWithJwt(builder.Configuration)
     .AddSwaggerConfiguration();
@@ -27,8 +27,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await app.MigrateAsync();
 }
+    
+await app.MigrateAsync();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
