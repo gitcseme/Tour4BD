@@ -1,17 +1,28 @@
 ﻿using System.Reflection;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SharedKarnel;
 
 namespace Application;
 
 public static class ApplicationDependencyResolverEstensions
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services, IConfigurationManager configuration)
     {
-        services.ConfigureMadiatR();
+        services
+            .ConfigureMadiatR()
+            .AddAutoMapper(Assembly.GetExecutingAssembly())
+            .AddRedisConfiguration(configuration);
 
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        return services;
+    }
 
+    private static IServiceCollection AddRedisConfiguration(this IServiceCollection services, IConfigurationManager configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString(AppConstants.RedisConnection);
+        });
         return services;
     }
 

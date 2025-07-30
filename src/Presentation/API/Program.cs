@@ -11,7 +11,7 @@ builder.AddBasicMvcConfiguration();
 
 builder.Services
     .AddPersistence(builder.Configuration)
-    .AddApplication()
+    .AddApplication(builder.Configuration)
     .AddMembership()
     .AddAuthenticationWithJwt(builder.Configuration)
     .AddSwaggerConfiguration();
