@@ -14,10 +14,17 @@ public static class ServiceCollectionExtensions
     {
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
 
-        if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+        try
         {
+            logger.LogInformation("Applying migrations to the database...");
             await dbContext.Database.MigrateAsync();
+            logger.LogInformation("Migrations applied successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while applying migrations to the database.");
         }
     }
 

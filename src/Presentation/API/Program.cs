@@ -27,8 +27,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await app.MigrateAsync();
 }
+    
+await app.MigrateAsync();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
