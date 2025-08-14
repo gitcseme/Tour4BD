@@ -26,7 +26,8 @@ public static class PersistenceDependencyResolverExtensions
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(configManager.GetConnectionString(AppConstants.MsSqlConnection), builder =>
+            var connectionString = configManager.GetConnectionString(AppConstants.MsSqlConnection);
+            options.UseSqlServer(connectionString, builder =>
             {
                 builder.CommandTimeout(30);
                 builder.EnableRetryOnFailure(3);

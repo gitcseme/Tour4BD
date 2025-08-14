@@ -16,7 +16,9 @@ services:
       - appnetwork
 
   tour4bd-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    build:
+      context: .
+      dockerfile: Infrastructure/Persistence/Dockerfile
     container_name: tour4bd-db-con
     restart: always
     ports:
