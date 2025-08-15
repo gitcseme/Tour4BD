@@ -34,10 +34,10 @@ var taf = new Faker<TravelAgency>()
 
 try
 {
-    for (var i = 1; i <= 10; ++i)
+    var travelAgencies = taf.Generate(10);
+    foreach (var travelAgency in travelAgencies)
     {
-        var travelAgencies = taf.Generate(1);
-        dbContext.TravelAgencies.AddRange(travelAgencies);
+        dbContext.TravelAgencies.Add(travelAgency);
         dbContext.SaveChanges();
     }
 }

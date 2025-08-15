@@ -1,5 +1,6 @@
 ﻿using SharedKarnel.Exceptions;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SharedKarnel.Grids;
 
@@ -106,6 +107,14 @@ public static class GridOperations
 
                     _ => null // For unsupported types, return null
                 },
+                "fts" => Expression.Call(
+                    typeof(SqlServerDbFunctionsExtensions),
+                    nameof(SqlServerDbFunctionsExtensions.FreeText),
+                    Type.EmptyTypes,
+                    Expression.Constant(EF.Functions),
+                    Expression.PropertyOrField(parameter, field),
+                    Expression.Constant(convertedValue)
+                ),
                 _ => null
             };
 
