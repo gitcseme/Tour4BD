@@ -1,8 +1,8 @@
 using API.Extensions;
-using Persistence;
+using API.Middlewares;
 using Application;
 using Membership;
-using API.Middlewares;
+using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,4 +43,7 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program { }
+namespace API
+{
+    public partial class Program { }
+}

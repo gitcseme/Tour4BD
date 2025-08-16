@@ -8,3 +8,15 @@ public static class AppConstants
 
     public const string RedisConnection = "RedisConnection";
 }
+
+public static class Operators
+{
+    public const string Eql = "=";
+    public const string Greater = ">";
+    public const string GreaterOrEql = ">=";
+    public const string Less = "<";
+    public const string LessOrEql = "<=";
+    public const string Contains = "contains";
+    public const string ContainsOrEql = "contains-or-equal";
+    public const string Fts = "fts";
+}
