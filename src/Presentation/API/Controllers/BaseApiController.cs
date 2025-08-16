@@ -11,13 +11,11 @@ namespace API.Controllers;
 public class BaseApiController : ControllerBase
 {
     private ISender _sender;
-    protected ISender Sender => _sender ?? (_sender = HttpContext.RequestServices.GetRequiredService<ISender>());
+    protected ISender Sender => _sender ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 
     [NonAction]
-    public IActionResult ApiResponse<T>(Result<T> result)
+    protected IActionResult ApiResponse<T>(Result<T> result)
     {
-        result.HostUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-
         return result.IsSuccess
             ? Ok(result)
             : BadRequest(result);

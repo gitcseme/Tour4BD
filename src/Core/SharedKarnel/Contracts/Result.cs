@@ -6,7 +6,6 @@ public class Result<T>
     public T Data { get; set; }
     public bool IsSuccess { get; set; }
     public dynamic Errors { get; set; }
-    public string? HostUrl { get; set; }
 
     public static Result<T> Success(T data, string message = default) => new()
     {
@@ -23,6 +22,6 @@ public class Result<T>
     };
 
     public static implicit operator Result<T>(T data) => Success(data);
-    public static implicit operator T(Result<T> result) => result.Data;
+    public static implicit operator Result<T>(string msg) => Failure(message: msg);
 
 }

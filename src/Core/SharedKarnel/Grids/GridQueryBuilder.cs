@@ -2,38 +2,32 @@
 
 namespace SharedKarnel.Grids;
 
-public class GridQueryBuilder<T, TGridRequest>
+public static class GridQueryBuilder<T, TGridRequest>
     where T : class
     where TGridRequest : GridDataFetchRequest
 {
-    private IQueryable<T> _query;
-    private readonly TGridRequest _request;
-
-    public GridQueryBuilder(IQueryable<T> query, TGridRequest request)
+    public static async Task<(IQueryable<T> Query, int TotalCount)> ExecuteAsync(
+        IQueryable<T> query, 
+        TGridRequest request, 
+        bool includeTotalCount = true)
     {
-        _query = query;
-        _request = request;
-    }
-
-    public async Task<(IQueryable<T> Query, int TotalCount)> ExecuteAsync(bool includeTotalCount = true)
-    {
-        if (_request.Search != null)
+        if (request.Search != null)
         {
-            _query = GridOperations.Search(_query, _request.Search);
+            query = GridOperations.Search(query, request.Search);
         }
 
-        var totalCount = includeTotalCount ? await _query.CountAsync() : 0;
+        var totalCount = includeTotalCount ? await query.CountAsync() : 0;
 
-        if (_request.Sort != null)
+        if (request.Sort != null)
         {
-            _query = GridOperations.Sort(_query, _request.Sort);
+            query = GridOperations.Sort(query, request.Sort);
         }
 
-        if (_request.Pagination != null)
+        if (request.Pagination != null)
         {
-            _query = GridOperations.Paginate(_query, _request.Pagination);
+            query = GridOperations.Paginate(query, request.Pagination);
         }
 
-        return (_query, totalCount);
+        return (query, totalCount);
     }
 }

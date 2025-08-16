@@ -28,8 +28,7 @@ public sealed class GetAllTravelAgencyQueryHandler
         GetAllTravelAgencyQuery request, 
         CancellationToken ctn)
     {
-        var result = await new GridDataFetchManager(_mapper)
-            .GetListAsync<TravelAgency, TravelAgencyListModel>(Query, request, ctn);
+        var result = await GridDataFetcher.GetListAsync<TravelAgency, TravelAgencyListModel>(Query, request, _mapper, ctn);
 
         return result;
     }

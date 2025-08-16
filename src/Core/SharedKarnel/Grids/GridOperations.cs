@@ -7,7 +7,7 @@ namespace SharedKarnel.Grids;
 public static class GridOperations
 {
     public static IQueryable<T> Search<T>(IQueryable<T> query, List<Search>? searchFilters)
-    where T : class
+        where T : class
     {
         if (searchFilters is null) return query;
 
@@ -38,7 +38,9 @@ public static class GridOperations
             {
                 if (targetType.IsEnum)
                 {
-                    convertedValue = string.IsNullOrEmpty(search.Value) ? null : Enum.Parse(targetType, search.Value!, ignoreCase: true);
+                    convertedValue = string.IsNullOrEmpty(search.Value)
+                        ? null
+                        : Enum.Parse(targetType, search.Value!, ignoreCase: true);
                 }
                 else
                 {
@@ -48,7 +50,6 @@ public static class GridOperations
             catch (Exception ex)
             {
                 throw new InvalidRequestException($"Incompatible search value: '{search.Value}' in field '{field}'");
-                //continue;
             }
 
             Expression? leftExpression = Expression.Property(parameter, property);
@@ -64,14 +65,14 @@ public static class GridOperations
             // Generate the expression based on the operator
             Expression? filterExpression = search.Operator.ToLower() switch
             {
-                "=" => Expression.Equal(leftExpression, targetValue),
-                ">" => Expression.GreaterThan(leftExpression, targetValue),
-                "<" => Expression.LessThan(leftExpression, targetValue),
-                ">=" => Expression.GreaterThanOrEqual(leftExpression, targetValue),
-                "<=" => Expression.LessThanOrEqual(leftExpression, targetValue),
-                "contains" when property.PropertyType == typeof(string) => Expression.Call(
+                Operators.Eql => Expression.Equal(leftExpression, targetValue),
+                Operators.Greater => Expression.GreaterThan(leftExpression, targetValue),
+                Operators.GreaterOrEql => Expression.GreaterThanOrEqual(leftExpression, targetValue),
+                Operators.Less => Expression.LessThan(leftExpression, targetValue),
+                Operators.LessOrEql => Expression.LessThanOrEqual(leftExpression, targetValue),
+                Operators.Contains when property.PropertyType == typeof(string) => Expression.Call(
                     leftExpression, typeof(string).GetMethod("Contains", [typeof(string)])!, targetValue),
-                "contains-or-equal" => property.PropertyType switch
+                Operators.ContainsOrEql => property.PropertyType switch
                 {
                     // String case: check for Contains or Equal
                     Type type when type == typeof(string) => Expression.OrElse(
@@ -81,10 +82,12 @@ public static class GridOperations
                         Expression.Equal(leftExpression, targetValue)
                     ),
                     // Integer case: check for Equality
-                    Type type when type == typeof(int) || type == typeof(int?) => Expression.Equal(leftExpression, targetValue),
+                    Type type when type == typeof(int) || type == typeof(int?) => Expression.Equal(leftExpression,
+                        targetValue),
 
                     // Long case: check for Equality
-                    Type type when type == typeof(long) || type == typeof(long?) => Expression.Equal(leftExpression, targetValue),
+                    Type type when type == typeof(long) || type == typeof(long?) => Expression.Equal(leftExpression,
+                        targetValue),
 
                     // Decimal case: check if between floor and ceiling values
                     Type type when type == typeof(decimal) || type == typeof(decimal?) => Expression.AndAlso(
@@ -98,16 +101,16 @@ public static class GridOperations
                     // Datetime case: check if between floor and ceiling values
                     Type type when convertedValue != null && type == typeof(DateTime) => Expression.AndAlso(
                         Expression.GreaterThanOrEqual(
-                            leftExpression, Expression.Constant(((DateTime) convertedValue).Date)
+                            leftExpression, Expression.Constant(((DateTime)convertedValue).Date)
                         ),
                         Expression.LessThanOrEqual(
-                            leftExpression, Expression.Constant(((DateTime) convertedValue).Date.AddDays(1).AddTicks(-1))
+                            leftExpression, Expression.Constant(((DateTime)convertedValue).Date.AddDays(1).AddTicks(-1))
                         )
                     ),
 
                     _ => null // For unsupported types, return null
                 },
-                "fts" => Expression.Call(
+                Operators.Fts => Expression.Call(
                     typeof(SqlServerDbFunctionsExtensions),
                     nameof(SqlServerDbFunctionsExtensions.FreeText),
                     Type.EmptyTypes,
@@ -150,7 +153,7 @@ public static class GridOperations
         var expression2 = Expression.Call(typeof(Queryable), orderBy, [typeof(T), memberExpression.Type],
             query.Expression, Expression.Quote(expression));
 
-        return (IOrderedQueryable<T>) query.Provider.CreateQuery<T>(expression2);
+        return (IOrderedQueryable<T>)query.Provider.CreateQuery<T>(expression2);
     }
 
     public static IQueryable<T> Paginate<T>(IQueryable<T> query, Pagination pagination)
