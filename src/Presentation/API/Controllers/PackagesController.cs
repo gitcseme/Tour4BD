@@ -1,4 +1,4 @@
-using Application.Features.Packages.Queries;
+using Application.Features.TourPackages.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
