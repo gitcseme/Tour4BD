@@ -1,4 +1,4 @@
-﻿namespace SharedKarnel.Grids;
+﻿namespace SharedKernel.Grids;
 
 public class DataFetchRequest
 {

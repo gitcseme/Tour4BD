@@ -1,4 +1,4 @@
-﻿namespace SharedKarnel.Exceptions;
+﻿namespace SharedKernel.Exceptions;
 
 public class InvalidRequestException : ApplicationException
 {

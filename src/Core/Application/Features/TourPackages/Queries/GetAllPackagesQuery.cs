@@ -6,8 +6,8 @@ using Application.Features.TourPackages.Models;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using SharedKarnel.Contracts;
-using SharedKarnel.Grids;
+using SharedKernel.Contracts;
+using SharedKernel.Grids;
 
 namespace Application.Features.TourPackages.Queries;
 

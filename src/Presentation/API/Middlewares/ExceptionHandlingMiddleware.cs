@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SharedKarnel.Contracts;
-using SharedKarnel.Exceptions;
+using SharedKernel.Contracts;
+using SharedKernel.Exceptions;
 
 namespace API.Middlewares;
 

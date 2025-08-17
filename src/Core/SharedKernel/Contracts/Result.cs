@@ -1,4 +1,4 @@
-﻿namespace SharedKarnel.Contracts;
+﻿namespace SharedKernel.Contracts;
 
 public class Result<T>
 {

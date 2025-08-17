@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace SharedKarnel.Exceptions;
+namespace SharedKernel.Exceptions;
 
 public class CommandValidationException : ApplicationException
 {

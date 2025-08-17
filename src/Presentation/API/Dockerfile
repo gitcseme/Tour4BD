@@ -15,7 +15,7 @@ WORKDIR /src
 COPY ["Presentation/API/API.csproj", "Presentation/API/"]
 COPY ["Core/Application/Application.csproj", "Core/Application/"]
 COPY ["Core/Domain/Domain.csproj", "Core/Domain/"]
-COPY ["Core/SharedKarnel/SharedKarnel.csproj", "Core/SharedKarnel/"]
+COPY ["Core/SharedKernel/SharedKernel.csproj", "Core/SharedKernel/"]
 COPY ["Infrastructure/Membership/Membership.csproj", "Infrastructure/Membership/"]
 COPY ["Infrastructure/Persistence/Persistence.csproj", "Infrastructure/Persistence/"]
 RUN dotnet restore "./Presentation/API/API.csproj"

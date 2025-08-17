@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SharedKarnel.Contracts;
+using SharedKernel.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 

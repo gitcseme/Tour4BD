@@ -1,8 +1,8 @@
-﻿using SharedKarnel.Exceptions;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.Exceptions;
 
-namespace SharedKarnel.Grids;
+namespace SharedKernel.Grids;
 
 public static class GridOperations
 {

@@ -1,6 +1,6 @@
 using Application.Features.Auth.Commands;
 using Application.Features.Auth.Models;
-using SharedKarnel.Contracts;
+using SharedKernel.Contracts;
 using Shouldly;
 using System.Net.Http.Json;
 using System.Text.Json;

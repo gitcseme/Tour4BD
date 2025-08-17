@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SharedKarnel.Contracts;
+using SharedKernel.Contracts;
 
 namespace Application.Messaging;
 
