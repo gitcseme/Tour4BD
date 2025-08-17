@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using SharedKarnel.Contracts;
+using SharedKernel.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 

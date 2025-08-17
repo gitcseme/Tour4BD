@@ -1,4 +1,4 @@
-﻿using SharedKarnel;
+﻿using SharedKernel;
 
 namespace Domain.Entities;
 

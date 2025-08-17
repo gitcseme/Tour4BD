@@ -4,8 +4,8 @@ using Application.Features.Agencies.Models;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using SharedKarnel;
-using SharedKarnel.Contracts;
+using SharedKernel;
+using SharedKernel.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 

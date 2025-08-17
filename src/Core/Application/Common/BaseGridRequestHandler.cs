@@ -2,7 +2,7 @@
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using SharedKarnel.Grids;
+using SharedKernel.Grids;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

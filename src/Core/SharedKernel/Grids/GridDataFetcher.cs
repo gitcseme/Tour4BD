@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using SharedKarnel.Exceptions;
+using SharedKernel.Exceptions;
 
-namespace SharedKarnel.Grids;
+namespace SharedKernel.Grids;
 
 public static class GridDataFetcher
 {

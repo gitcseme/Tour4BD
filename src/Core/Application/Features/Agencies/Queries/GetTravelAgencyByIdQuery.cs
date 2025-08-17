@@ -5,7 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
-using SharedKarnel.Contracts;
+using SharedKernel.Contracts;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

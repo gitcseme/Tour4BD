@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SharedKarnel.Contracts;
+using SharedKernel.Contracts;
 
 namespace API.Controllers;
 

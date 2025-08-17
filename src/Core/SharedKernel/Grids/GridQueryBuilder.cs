@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SharedKarnel.Grids;
+namespace SharedKernel.Grids;
 
 public static class GridQueryBuilder<T, TGridRequest>
     where T : class
